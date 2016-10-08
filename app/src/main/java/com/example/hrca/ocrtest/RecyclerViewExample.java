@@ -1,5 +1,6 @@
 package com.example.hrca.ocrtest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import com.daimajia.swipe.util.Attributes;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class RecyclerViewExample extends AppCompatActivity {
@@ -31,6 +34,7 @@ public class RecyclerViewExample extends AppCompatActivity {
 
     private TextView tvEmptyView;
     private RecyclerView mRecyclerView;
+    private ArrayList<String> namirnice_list = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,10 @@ public class RecyclerViewExample extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tvEmptyView = (TextView) findViewById(R.id.empty_view);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+        Intent i = getIntent();
+        namirnice_list = i.getStringArrayListExtra("namirnice");
+
 
         // Layout Managers:
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -97,11 +105,42 @@ public class RecyclerViewExample extends AppCompatActivity {
     // load initial data
     public void loadData() {
 
-        for (int i = 0; i <= 20; i++) {
-            mDataSet.add(new Student("Student " + i, "androidstudent" + i + "@gmail.com"));
+    String poljeNamirnica[]=null;
 
+        for (String str:namirnice_list
+             ) {
+            poljeNamirnica= str.split("\\n");
         }
 
+        ArrayList<String> listaStringova=new ArrayList<>();
+
+
+        for (int i=0;i<namirnice_list.size();i++) {
+
+            Pattern p = Pattern.compile("(?!(([A-Z)|(^A-Z]\\s)|(\\d)))\\w+");
+            Matcher matcher=p.matcher(namirnice_list.get(i));
+       //     String namirnica=namirnice_list.get(i);
+
+            String namirnica=namirnice_list.get(i);
+
+
+            if(matcher.find()){
+                namirnica=matcher.group(0);
+
+                if(namirnica.contains("Poupa")||namirnica.contains("TALHO")||namirnica.contains("CONGELADOS")||namirnica.contains("ERCEARIA")||namirnica.contains("X")){
+                    System.out.println("Izbacena namirnica:"+ namirnica);
+                    namirnice_list.remove(i);
+                    continue;
+                }
+
+                }
+//            mDataSet.add(new Student(namirnica, "topkek"));
+            mDataSet.add(new Student(namirnica, "topkek"));
+
+        }
+        for (String namirni : namirnice_list) {
+            System.out.println("Evo je: "+ namirni);
+        }
 
     }
 

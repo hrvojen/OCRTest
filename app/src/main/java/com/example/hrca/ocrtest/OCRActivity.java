@@ -41,7 +41,7 @@ public class OCRActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                Intent intentToList = new Intent(view.getContext(), ListActivity.class);
+                Intent intentToList = new Intent(view.getContext(), RecyclerViewExample.class);
 
                 intentToList.putExtra("namirnice", namirnice);
                 startActivity(intentToList);
