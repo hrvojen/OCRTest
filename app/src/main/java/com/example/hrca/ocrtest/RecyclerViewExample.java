@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.daimajia.swipe.util.Attributes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +37,8 @@ public class RecyclerViewExample extends AppCompatActivity {
     private TextView tvEmptyView;
     private RecyclerView mRecyclerView;
     private ArrayList<String> namirnice_list = new ArrayList<String>();
+    private static List<String> listaStr2=new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,22 +110,26 @@ public class RecyclerViewExample extends AppCompatActivity {
     public void loadData() {
 
     String poljeNamirnica[]=null;
+        List<String> listaStringova=null;
 
-        for (String str:namirnice_list
-             ) {
-            poljeNamirnica= str.split("\\n");
+        for(int i=0;i<namirnice_list.size();i++){
+            List<String> tempList = new ArrayList<String>();
+            if(namirnice_list.get(i).contains("\n")){
+
+                tempList=Arrays.asList(namirnice_list.get(i).split("\n"));
+            }
+            listaStr2.addAll(tempList);
         }
+        
+//        for (int i=0;i<namirnice_list.size();i++) {
 
-        ArrayList<String> listaStringova=new ArrayList<>();
-
-
-        for (int i=0;i<namirnice_list.size();i++) {
+            for (int i=0;i<listaStr2.size();i++) {
 
             Pattern p = Pattern.compile("(?!(([A-Z)|(^A-Z]\\s)|(\\d)))\\w+");
-            Matcher matcher=p.matcher(namirnice_list.get(i));
+            Matcher matcher=p.matcher(listaStr2.get(i));
        //     String namirnica=namirnice_list.get(i);
 
-            String namirnica=namirnice_list.get(i);
+            String namirnica=listaStr2.get(i);
 
 
             if(matcher.find()){
@@ -129,7 +137,7 @@ public class RecyclerViewExample extends AppCompatActivity {
 
                 if(namirnica.contains("Poupa")||namirnica.contains("TALHO")||namirnica.contains("CONGELADOS")||namirnica.contains("ERCEARIA")||namirnica.contains("X")){
                     System.out.println("Izbacena namirnica:"+ namirnica);
-                    namirnice_list.remove(i);
+                    listaStr2.remove(i);
                     continue;
                 }
 
